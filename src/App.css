@@ -65,7 +65,14 @@ label {
   align-items: flex-start;
 }
 
-.array-line {
+.array {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.array-column {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
@@ -73,10 +80,26 @@ label {
   gap: 4px;
 }
 
+.array-line {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+
 .array-idx {
   color: #BFBFBF;
 }
 
 .brackets {
   color: #F2CAB8;
+}
+
+.array-line>.result-line-child {
+  margin-left: 16px;
+}
+
+.array-column>.result-line-child {
+  margin-left: 16px;
 }

@@ -109,22 +109,32 @@ function App() {
 					) : (
 						<div className='value'>{simpleValueRender(obj[key])}</div>
 					)}
-
-					{shouldRenderBrackets ? <span className='brackets'> ]</span> : null}
 				</div>
 			);
 		});
 	};
 
 	const iterateOverArray = (arr: any[]) => {
-		return arr.map((item, idx) => {
-			return (
-				<div key={idx} className='array-line'>
+		const data = arr.map((item, idx) => {
+			return item && typeof item === 'object' ? (
+				<div className='array-column'>
 					<div className='array-idx'>{idx}: </div>
-					{iterateOverObject(item, true)}
+					{complexValueRender(item)}
+				</div>
+			) : (
+				<div className='array-line'>
+					<div className='array-idx'>{idx}: </div>
+					{simpleValueRender(item)}
 				</div>
 			);
 		});
+
+		return (
+			<div className='array'>
+				{data}
+				<span className='brackets'>]</span>
+			</div>
+		);
 	};
 
 	const getContent = () => {
