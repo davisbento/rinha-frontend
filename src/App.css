@@ -10,7 +10,7 @@ input[type="file"] {
 }
 
 label {
-  padding: 20px;
+  padding: 8px;
   background-color: #333;
   color: #FFF;
   text-transform: uppercase;
