@@ -34,7 +34,7 @@ label {
 }
 
 .result {
-  width: 400px;
+  width: 600px;
   display: flex;
   justify-content: flex-start;
 }
@@ -63,6 +63,14 @@ label {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+}
+
+.array-line {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .array-idx {

@@ -77,19 +77,11 @@ function App() {
 			return `"${value}"`;
 		}
 
-		return value;
-	};
+		if (typeof value === 'boolean') {
+			return value ? 'true' : 'false';
+		}
 
-	const iterateOverArray = (arr: any[]) => {
-		console.log('arr: ', arr);
-		return arr.map((item, idx) => {
-			console.log('item: ', item);
-			return (
-				<div key={idx} className={`array-line-${idx}`}>
-					<div className='array-idx'>{idx}: </div>
-				</div>
-			);
-		});
+		return value ?? 'null';
 	};
 
 	const complexValueRender = (value: any) => {
@@ -112,13 +104,24 @@ function App() {
 						{key}: {shouldRenderBrackets ? <span className='brackets'> [</span> : null}
 					</div>
 
-					{typeof obj[key] === 'object' ? (
+					{obj[key] && typeof obj[key] === 'object' ? (
 						<div className='value-obj'>{complexValueRender(obj[key])}</div>
 					) : (
 						<div className='value'>{simpleValueRender(obj[key])}</div>
 					)}
 
 					{shouldRenderBrackets ? <span className='brackets'> ]</span> : null}
+				</div>
+			);
+		});
+	};
+
+	const iterateOverArray = (arr: any[]) => {
+		return arr.map((item, idx) => {
+			return (
+				<div key={idx} className='array-line'>
+					<div className='array-idx'>{idx}: </div>
+					{iterateOverObject(item, true)}
 				</div>
 			);
 		});
