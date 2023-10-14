@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import './App.css';
 
@@ -8,10 +9,7 @@ function App() {
 	const offsetRef = useRef(0);
 	const bufferRef = useRef(new Uint8Array());
 	const [isBottom, setIsBottom] = useState(false);
-	const [page, setPage] = useState(1);
-
-	console.log('page: ', page);
-	console.log('isBottom: ', isBottom);
+	const [, setPage] = useState(1);
 
 	const readChunks = useCallback(() => {
 		const buffer = bufferRef.current;
@@ -74,6 +72,74 @@ function App() {
 		}
 	}, [isBottom, readChunks]);
 
+	const simpleValueRender = (value: any) => {
+		if (typeof value === 'string') {
+			return `"${value}"`;
+		}
+
+		return value;
+	};
+
+	const iterateOverArray = (arr: any[]) => {
+		console.log('arr: ', arr);
+		return arr.map((item, idx) => {
+			console.log('item: ', item);
+			return (
+				<div key={idx} className={`array-line-${idx}`}>
+					<div className='array-idx'>{idx}: </div>
+				</div>
+			);
+		});
+	};
+
+	const complexValueRender = (value: any) => {
+		// check if its an array
+		if (Array.isArray(value)) {
+			return iterateOverArray(value);
+		}
+
+		return iterateOverObject(value, true);
+	};
+
+	const iterateOverObject = (obj: any, isChild: boolean) => {
+		const keys = Object.keys(obj);
+
+		return keys.map((key) => {
+			const shouldRenderBrackets = Array.isArray(obj[key]);
+			return (
+				<div key={key} className={isChild ? 'result-line-child' : 'result-line'}>
+					<div className='key'>
+						{key}: {shouldRenderBrackets ? <span className='brackets'> [</span> : null}
+					</div>
+
+					{typeof obj[key] === 'object' ? (
+						<div className='value-obj'>{complexValueRender(obj[key])}</div>
+					) : (
+						<div className='value'>{simpleValueRender(obj[key])}</div>
+					)}
+
+					{shouldRenderBrackets ? <span className='brackets'> ]</span> : null}
+				</div>
+			);
+		});
+	};
+
+	const getContent = () => {
+		if (!content) return null;
+
+		try {
+			const json = JSON.parse(content);
+
+			return iterateOverObject(json, false);
+		} catch (e) {
+			// valid if the json is not complete
+			if (e instanceof SyntaxError) {
+				console.log('Invalid JSON');
+				return null;
+			}
+		}
+	};
+
 	useEffect(() => {
 		window.addEventListener('scroll', handleScroll);
 
@@ -92,7 +158,7 @@ function App() {
 				<input type='file' name='fileInput' id='fileInput' onChange={handleUpload} />
 			</div>
 
-			{content ? <div className='result'>{content}</div> : null}
+			{content ? <div className='result'>{getContent()}</div> : null}
 		</div>
 	);
 }

@@ -34,5 +34,41 @@ label {
 }
 
 .result {
-  line-break: anywhere;
+  width: 400px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.result-line {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.result-line-child {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.key {
+  color: #4E9590;
+}
+
+.value-obj {
+  margin-left: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.array-idx {
+  color: #BFBFBF;
+}
+
+.brackets {
+  color: #F2CAB8;
 }
