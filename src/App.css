@@ -58,7 +58,6 @@ label {
 }
 
 .value-obj {
-  margin-left: 16px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -87,6 +86,14 @@ label {
   gap: 4px;
 }
 
+.array-line::before {
+  content: "";
+  width: 1px;
+  height: 30px;
+  background-color: #BFBFBF;
+  margin-left: 2px;
+  margin-right: 16px;
+}
 
 .array-idx {
   color: #BFBFBF;

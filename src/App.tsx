@@ -97,11 +97,16 @@ function App() {
 		const keys = Object.keys(obj);
 
 		return keys.map((key) => {
-			const shouldRenderBrackets = Array.isArray(obj[key]);
+			const isArray = Array.isArray(obj[key]);
+
 			return (
-				<div key={key} className={isChild ? 'result-line-child' : 'result-line'}>
+				<div
+					key={key}
+					className={isChild ? 'result-line-child' : 'result-line'}
+					style={isArray ? { flexDirection: 'column', alignItems: 'flex-start' } : {}}
+				>
 					<div className='key'>
-						{key}: {shouldRenderBrackets ? <span className='brackets'> [</span> : null}
+						{key}: {isArray ? <span className='brackets'> [</span> : null}
 					</div>
 
 					{obj[key] && typeof obj[key] === 'object' ? (
@@ -117,12 +122,12 @@ function App() {
 	const iterateOverArray = (arr: any[]) => {
 		const data = arr.map((item, idx) => {
 			return item && typeof item === 'object' ? (
-				<div className='array-column'>
+				<div className='array-column' key={idx}>
 					<div className='array-idx'>{idx}: </div>
 					{complexValueRender(item)}
 				</div>
 			) : (
-				<div className='array-line'>
+				<div className='array-line' key={idx}>
 					<div className='array-idx'>{idx}: </div>
 					{simpleValueRender(item)}
 				</div>
