@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import './App.css';
+import { parseJSON } from './services/jsonParser';
 
 const validFormats = ['json'];
 
@@ -9,6 +10,7 @@ function App() {
 	const offsetRef = useRef(0);
 	const bufferRef = useRef(new Uint8Array());
 	const [isBottom, setIsBottom] = useState(false);
+	const [error, setError] = useState('');
 	const [, setPage] = useState(1);
 
 	const readChunks = useCallback(() => {
@@ -18,7 +20,7 @@ function App() {
 		// stop reading if we reached the end of the file
 		if (offset >= buffer.length) return;
 
-		const chunkSize = 1028 * 1028 * 0.2; // 0.2mb
+		const chunkSize = 512; // 512 bytes
 		const chunk = buffer.slice(offset, offset + chunkSize);
 		offsetRef.current = offset + chunkSize;
 
@@ -36,7 +38,7 @@ function App() {
 
 			const format = file.name.split('.').pop();
 			if (!format || !validFormats.includes(format)) {
-				alert('Invalid file format');
+				setError('Invalid file format');
 				return;
 			}
 
@@ -146,13 +148,12 @@ function App() {
 		if (!content) return null;
 
 		try {
-			const json = JSON.parse(content);
-
+			const json = parseJSON(content);
 			return iterateOverObject(json, false);
 		} catch (e) {
 			// valid if the json is not complete
 			if (e instanceof SyntaxError) {
-				console.log('Invalid JSON');
+				// setError('Invalid JSON');
 				return null;
 			}
 		}
@@ -175,6 +176,8 @@ function App() {
 				<label htmlFor='fileInput'>Load json</label>
 				<input type='file' name='fileInput' id='fileInput' onChange={handleUpload} />
 			</div>
+
+			{error ? <div className='error'>{error}</div> : null}
 
 			{content ? <div className='result'>{getContent()}</div> : null}
 		</div>
